@@ -9,12 +9,14 @@ module Crypto.Sugar.Cipher
   , blowfish64
   , blowfish128
   , blowfish256
+  , cast5
   ) where
 
-import Crypto.Sugar.Internal (makeLengthExactly)
+import Crypto.Sugar.Internal (makeLengthExactly, makeLengthWithin)
 
 import qualified Crypto.Cipher.AES as Cryptonite
 import qualified Crypto.Cipher.Blowfish as Cryptonite
+import qualified Crypto.Cipher.CAST5 as Cryptonite
 import qualified Crypto.Cipher.Types as Cryptonite
 import qualified Crypto.Error as Cryptonite
 import qualified ByteString
@@ -24,52 +26,60 @@ aes128
   :: ByteString
   -> ByteString
   -> ByteString
-aes128 key =
-  case Cryptonite.cipherInit @Cryptonite.AES128 (makeLengthExactly 16 key) of
-    Cryptonite.CryptoPassed cipher ->
-      Cryptonite.ctrCombine cipher Cryptonite.nullIV
+aes128 =
+  ctr @Cryptonite.AES128 . makeLengthExactly 16
 
 aes192
   :: ByteString
   -> ByteString
   -> ByteString
-aes192 key =
-  ctr @Cryptonite.AES192 (makeLengthExactly 24 key)
+aes192 =
+  ctr @Cryptonite.AES192 . makeLengthExactly 24
 
 aes256
   :: ByteString
   -> ByteString
   -> ByteString
-aes256 key =
-  ctr @Cryptonite.AES256 (makeLengthExactly 32 key)
+aes256 =
+  ctr @Cryptonite.AES256 . makeLengthExactly 32
+
+-- not sure yet if allowing any <=56 byte keys is a bug in cryptonite,
+-- https://github.com/haskell-crypto/cryptonite/issues/282
 
 blowfish
   :: ByteString
   -> ByteString
   -> ByteString
-blowfish key =
-  ctr @Cryptonite.Blowfish (ByteString.take 56 key)
+blowfish =
+  ctr @Cryptonite.Blowfish . ByteString.take 56
 
 blowfish64
   :: ByteString
   -> ByteString
   -> ByteString
-blowfish64 key =
-  ctr @Cryptonite.Blowfish64 (ByteString.take 56 key)
+blowfish64 =
+  ctr @Cryptonite.Blowfish64 . ByteString.take 56
 
 blowfish128
   :: ByteString
   -> ByteString
   -> ByteString
-blowfish128 key =
-  ctr @Cryptonite.Blowfish128 (ByteString.take 56 key)
+blowfish128 =
+  ctr @Cryptonite.Blowfish128 . ByteString.take 56
 
 blowfish256
   :: ByteString
   -> ByteString
   -> ByteString
-blowfish256 key =
-  ctr @Cryptonite.Blowfish256 (ByteString.take 56 key)
+blowfish256 =
+  ctr @Cryptonite.Blowfish256 . ByteString.take 56
+
+cast5
+  :: ByteString
+  -> ByteString
+  -> ByteString
+cast5 =
+  ctr @Cryptonite.CAST5 . makeLengthWithin 5 16
 
 ctr
   :: forall cipher.
