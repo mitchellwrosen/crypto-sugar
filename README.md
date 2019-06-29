@@ -1,1 +1,1 @@
-# pkgname
+# crypto-sugar

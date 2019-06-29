@@ -1,31 +1,31 @@
 cabal-version: 2.4
 
 author:       Mitchell Rosen
-bug-reports:  https://github.com/mitchellwrosen/pkgname/issues
+bug-reports:  https://github.com/mitchellwrosen/crypto-sugar/issues
 category:     Data
 copyright:    (c) 2019, Mitchell Rosen
 description:  Description
-homepage:     https://github.com/mitchellwrosen/pkgname
+homepage:     https://github.com/mitchellwrosen/crypto-sugar
 license-file: LICENSE
 license:      BSD-3-Clause
 maintainer:   Mitchell Rosen <mitchellwrosen@gmail.com>
-name:         pkgname
+name:         crypto-sugar
 synopsis:     Synopsis
 version:      0
 tested-with:  GHC == 8.6.5
 
 extra-source-files:
-  -- .travis.yml
+  .travis.yml
   CHANGELOG.md
   README.md
 
 source-repository head
   type: git
-  location: git://github.com/mitchellwrosen/pkgname.git
+  location: git://github.com/mitchellwrosen/crypto-sugar.git
 
 common common
   build-depends:
-    base,
+    base ^>= 4.12,
 
   default-extensions:
     BangPatterns
@@ -94,53 +94,64 @@ common common
     -Wpartial-fields
     -Wredundant-constraints
 
+library
+  import:
+    common
+
+  build-depends:
+    bytestring ^>= 0.10.8,
+    cryptonite == 0.26,
+
+  exposed-modules:
+    Crypto.Sugar.Cipher
+
+  hs-source-dirs:
+    src
+
   mixins:
     base hiding (Prelude),
-    base (Prelude as BasePrelude)
+    base (Prelude as BasePrelude),
+    bytestring (Data.ByteString as ByteString),
 
-common common-exe
-  ghc-options:
-    -threaded
+  other-modules:
+    Crypto.Sugar.Internal
+    Prelude
 
 library
   import:
     common
 
   build-depends:
+    bytestring ^>= 0.10.8,
+    cryptonite == 0.26,
 
   exposed-modules:
-    Prelude
+    Crypto.Sugar.Cipher
 
   hs-source-dirs:
     src
 
+  mixins:
+    base hiding (Prelude),
+    base (Prelude as BasePrelude),
+    bytestring (Data.ByteString as ByteString),
+
   other-modules:
-
-executable pkgname
-  import:
-    common,
-    common-exe,
-
-  build-depends:
-    optparse-applicative,
-    pkgname,
-
-  hs-source-dirs:
-    app
-
-  main-is:
-    Main.hs
+    Crypto.Sugar.Internal
+    Prelude
 
 test-suite tests
   import:
     common,
-    common-exe,
 
   build-depends:
+    crypto-sugar,
     hedgehog,
-    pkgname,
     tasty,
     tasty-hedgehog,
+
+  ghc-options:
+    -threaded
 
   hs-source-dirs:
     test
