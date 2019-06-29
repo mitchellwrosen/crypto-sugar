@@ -1,0 +1,152 @@
+cabal-version: 2.4
+
+author:       Mitchell Rosen
+bug-reports:  https://github.com/mitchellwrosen/pkgname/issues
+category:     Data
+copyright:    (c) 2019, Mitchell Rosen
+description:  Description
+homepage:     https://github.com/mitchellwrosen/pkgname
+license-file: LICENSE
+license:      BSD-3-Clause
+maintainer:   Mitchell Rosen <mitchellwrosen@gmail.com>
+name:         pkgname
+synopsis:     Synopsis
+version:      0
+tested-with:  GHC == 8.6.5
+
+extra-source-files:
+  -- .travis.yml
+  CHANGELOG.md
+  README.md
+
+source-repository head
+  type: git
+  location: git://github.com/mitchellwrosen/pkgname.git
+
+common common
+  build-depends:
+    base,
+
+  default-extensions:
+    BangPatterns
+    ConstraintKinds
+    DataKinds
+    DefaultSignatures
+    DeriveAnyClass
+    DeriveFunctor
+    DeriveGeneric
+    DerivingStrategies
+    DuplicateRecordFields
+    ExistentialQuantification
+    FlexibleContexts
+    FlexibleInstances
+    GADTs
+    GeneralizedNewtypeDeriving
+    InstanceSigs
+    KindSignatures
+    LambdaCase
+    MagicHash
+    MultiParamTypeClasses
+    NamedFieldPuns
+    OverloadedLabels
+    OverloadedStrings
+    PatternSynonyms
+    RankNTypes
+    RecordWildCards
+    ScopedTypeVariables
+    StandaloneDeriving
+    StrictData
+    TupleSections
+    TypeApplications
+    TypeFamilies
+    TypeOperators
+    UnicodeSyntax
+    ViewPatterns
+
+  default-language:
+    Haskell2010
+
+  ghc-options:
+    -fprint-expanded-synonyms
+    -fprint-explicit-foralls
+    -fprint-explicit-kinds
+    -fprint-unicode-syntax
+    -j
+    -Wall
+    -Wcompat
+    -Werror=empty-enumerations
+    -Werror=inaccessible-code
+    -Werror=incomplete-patterns
+    -Werror=incomplete-uni-patterns
+    -Werror=missing-fields
+    -Werror=missing-methods
+    -Werror=overflowed-literals
+    -Werror=overlapping-patterns
+    -Werror=partial-fields
+    -Werror=tabs
+    -Widentities
+    -Wincomplete-record-updates
+    -Wincomplete-patterns
+    -Wincomplete-uni-patterns
+    -Wmissing-local-signatures
+    -Wnoncanonical-monad-instances
+    -Wnoncanonical-monadfail-instances
+    -Wpartial-fields
+    -Wredundant-constraints
+
+  mixins:
+    base hiding (Prelude),
+    base (Prelude as BasePrelude)
+
+common common-exe
+  ghc-options:
+    -threaded
+
+library
+  import:
+    common
+
+  build-depends:
+
+  exposed-modules:
+    Prelude
+
+  hs-source-dirs:
+    src
+
+  other-modules:
+
+executable pkgname
+  import:
+    common,
+    common-exe,
+
+  build-depends:
+    optparse-applicative,
+    pkgname,
+
+  hs-source-dirs:
+    app
+
+  main-is:
+    Main.hs
+
+test-suite tests
+  import:
+    common,
+    common-exe,
+
+  build-depends:
+    hedgehog,
+    pkgname,
+    tasty,
+    tasty-hedgehog,
+
+  hs-source-dirs:
+    test
+
+  main-is:
+    Main.hs
+
+  type:
+    exitcode-stdio-1.0
