@@ -29,6 +29,7 @@ common common
 
   default-extensions:
     BangPatterns
+    BlockArguments
     ConstraintKinds
     DataKinds
     DefaultSignatures
@@ -101,6 +102,11 @@ library
   build-depends:
     bytestring ^>= 0.10.8,
     cryptonite == 0.26,
+    memory ^>= 0.14.18,
+    mmorph ^>= 1.1.3,
+    streaming ^>= 0.2.2,
+    streaming-bytestring ^>= 0.1.6,
+    transformers ^>= 0.5.6.2,
 
   exposed-modules:
     Crypto.Sugar.Cipher
@@ -111,30 +117,6 @@ library
   mixins:
     base hiding (Prelude),
     base (Prelude as BasePrelude),
-    bytestring (Data.ByteString as ByteString),
-
-  other-modules:
-    Crypto.Sugar.Internal
-    Prelude
-
-library
-  import:
-    common
-
-  build-depends:
-    bytestring ^>= 0.10.8,
-    cryptonite == 0.26,
-
-  exposed-modules:
-    Crypto.Sugar.Cipher
-
-  hs-source-dirs:
-    src
-
-  mixins:
-    base hiding (Prelude),
-    base (Prelude as BasePrelude),
-    bytestring (Data.ByteString as ByteString),
 
   other-modules:
     Crypto.Sugar.Internal

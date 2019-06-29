@@ -1,9 +1,10 @@
 module Crypto.Sugar.Internal
   ( makeLengthExactly
   , makeLengthWithin
+  , pad
   ) where
 
-import qualified ByteString
+import qualified Data.ByteString as ByteString
 
 
 makeLengthExactly :: Int -> ByteString -> ByteString
